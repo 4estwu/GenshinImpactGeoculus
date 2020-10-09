@@ -69,7 +69,10 @@ def print_solution(manager, routing, solution):
         plan_output += ' {} ->'.format(manager.IndexToNode(index))
         previous_index = index
         index = solution.Value(routing.NextVar(index))
-        route_distance += routing.GetArcCostForVehicle(previous_index, index, 0)
+        from_node = manager.IndexToNode(previous_index)
+        to_node = manager.IndexToNode(index)
+        dist = distances[from_node][to_node]
+        route_distance += dist
     plan_output += ' {}\n'.format(manager.IndexToNode(index))
     print(plan_output)
     plan_output += 'Route distance: {}miles\n'.format(route_distance)
