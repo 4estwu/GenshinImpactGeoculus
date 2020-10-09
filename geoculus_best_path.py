@@ -23,7 +23,6 @@ inverted = ~black_and_white_image
 
 #connected components
 num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(inverted, 8, cv2.CV_32S)
-print(centroids)
 #tsp
 #calculate distance matrix O(n^2)
 nodes = len(centroids)
@@ -68,23 +67,18 @@ def print_solution(manager, routing, solution):
         previous_index = index
         index = solution.Value(routing.NextVar(index))
         #add lines
-        print(previous_index)
-        print(index)
-
         from_node = manager.IndexToNode(previous_index)
         to_node = manager.IndexToNode(index)
-        cv2.line(img, tuple(centroids[from_node].astype(int)), tuple(centroids[to_node].astype(int)), (0, 0, 255), 1)
+        cv2.line(img, tuple(centroids[from_node].astype(int)), tuple(centroids[to_node].astype(int)), (0, 0, 255), 3)
 
         dist = distances[from_node][to_node]
         route_distance += dist
     plan_output += ' {}\n'.format(manager.IndexToNode(index))
     plan_output += 'Route distance: {}miles\n'.format(route_distance)
-    print(plan_output)
     cv2.imshow("poggers" , img)
     cv2.imwrite("poggers.jpg", img)
 
     cv2.waitKey(0)
     cv2.destroyAllWindows()  
-
 
 print_solution(manager, routing, solution)
