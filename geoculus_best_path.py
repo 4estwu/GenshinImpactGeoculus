@@ -35,7 +35,7 @@ for row in range(0, nodes):
 def distance_callback(from_index, to_index):
     """Returns the distance between the two nodes."""
     # Convert from routing variable Index to distance matrix NodeIndex.
-    from_node = manager.IndexToNodefrom_index
+    from_node = manager.IndexToNode(from_index)
     to_node = manager.IndexToNode(to_index)
     return distance_matrix[from_node][to_node]
 
