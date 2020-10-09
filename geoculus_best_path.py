@@ -37,7 +37,7 @@ def distance_callback(from_index, to_index):
     # Convert from routing variable Index to distance matrix NodeIndex.
     from_node = manager.IndexToNode(from_index)
     to_node = manager.IndexToNode(to_index)
-    return distance_matrix[from_node][to_node]
+    return distances[from_node][to_node]
 
 #second arg: num vehicles, third arg: starting point
 manager = pywrapcp.RoutingIndexManager(len(distances),1, 0)
@@ -51,10 +51,8 @@ routing.SetArcCostEvaluatorOfAllVehicles(transit_callback_index)
 
 # use guided local search
 search_parameters = pywrapcp.DefaultRoutingSearchParameters()
-search_parameters.local_search_metaheuristic = (
-    routing_enums_pb2.LocalSearchMetaheuristic.GUIDED_LOCAL_SEARCH)
-search_parameters.time_limit.seconds = 30
-search_parameters.log_search = True
+search_parameters.first_solution_strategy = (
+    routing_enums_pb2.FirstSolutionStrategy.PATH_CHEAPEST_ARC)
 
 # let google do all the hard work
 solution = routing.SolveWithParameters(search_parameters)
@@ -69,12 +67,24 @@ def print_solution(manager, routing, solution):
         plan_output += ' {} ->'.format(manager.IndexToNode(index))
         previous_index = index
         index = solution.Value(routing.NextVar(index))
+        #add lines
+        print(previous_index)
+        print(index)
+
         from_node = manager.IndexToNode(previous_index)
         to_node = manager.IndexToNode(index)
+        cv2.line(img, tuple(centroids[from_node].astype(int)), tuple(centroids[to_node].astype(int)), (0, 0, 255), 1)
+
         dist = distances[from_node][to_node]
         route_distance += dist
     plan_output += ' {}\n'.format(manager.IndexToNode(index))
     plan_output += 'Route distance: {}miles\n'.format(route_distance)
     print(plan_output)
+    cv2.imshow("poggers" , img)
+    cv2.imwrite("poggers.jpg", img)
+
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()  
+
 
 print_solution(manager, routing, solution)
