@@ -74,7 +74,7 @@ def print_solution(manager, routing, solution):
         dist = distances[from_node][to_node]
         route_distance += dist
     plan_output += ' {}\n'.format(manager.IndexToNode(index))
-    print(plan_output)
     plan_output += 'Route distance: {}miles\n'.format(route_distance)
+    print(plan_output)
 
 print_solution(manager, routing, solution)
