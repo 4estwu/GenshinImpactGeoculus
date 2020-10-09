@@ -50,9 +50,10 @@ routing.SetArcCostEvaluatorOfAllVehicles(transit_callback_index)
 
 # use guided local search
 search_parameters = pywrapcp.DefaultRoutingSearchParameters()
-search_parameters.first_solution_strategy = (
-    routing_enums_pb2.FirstSolutionStrategy.PATH_CHEAPEST_ARC)
-
+search_parameters.local_search_metaheuristic = (
+    routing_enums_pb2.LocalSearchMetaheuristic.GUIDED_LOCAL_SEARCH)
+search_parameters.time_limit.seconds = 30
+search_parameters.log_search = True
 # let google do all the hard work
 solution = routing.SolveWithParameters(search_parameters)
 
